@@ -1,10 +1,14 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule }    from '@angular/forms';
-import { HttpClientModule }    from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent }   from './app.component';
+
+// import ngx-translate and the http loader
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 // Import PrimeNG modules
 import { AccordionModule } from 'primeng/accordion';
@@ -167,9 +171,24 @@ import { TreeTableModule } from 'primeng/treetable';
     ToolbarModule,
     TooltipModule,
     TreeModule,
-    TreeTableModule ],
+    TreeTableModule,
+  
+    HttpClientModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    })
+  ],
   declarations: [ AppComponent ],
   bootstrap:    [ AppComponent ]
 })
 
 export class AppModule { }
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}
